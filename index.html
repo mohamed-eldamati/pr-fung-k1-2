@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prüfung – Lösungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F4F9; --ink:#17203A; --muted:#5B6585; --card:#FFFFFF; --line:#DCE1EE;
+  --p-ich:#2563EB; --p-du:#0B8F77; --p-er:#B87900; --p-wir:#7C4DDB; --p-ihr:#D6397F; --p-sie:#DC4A17;
+  --font:"Bricolage Grotesque","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);display:flex;flex-direction:column;overflow:hidden;
+  background-image:radial-gradient(circle at 12% 8%,rgba(37,99,235,.07),transparent 38%),radial-gradient(circle at 92% 92%,rgba(220,74,23,.07),transparent 40%)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--p-ich);outline-offset:3px;border-radius:8px}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.4rem;flex:0 0 auto}
+.brand{font-weight:800;font-size:1.05rem;letter-spacing:-.01em}
+.brand small{font-weight:400;color:var(--muted);margin-left:.5rem}
+.tools{display:flex;gap:.5rem}
+.chip-btn{padding:.45rem .9rem;border-radius:999px;background:var(--card);border:1.5px solid var(--line);font-size:.9rem;font-weight:600;transition:border-color .2s,background .2s}
+.chip-btn:hover{border-color:var(--ink)}
+.chip-btn[aria-pressed="false"]{color:var(--muted);text-decoration:line-through}
+
+main{flex:1 1 auto;position:relative;overflow:hidden;min-height:0}
+.track{display:flex;height:100%;transition:transform .55s cubic-bezier(.22,.8,.3,1);will-change:transform}
+.slide{flex:0 0 100%;height:100%;overflow-y:auto;padding:1rem 1.4rem 1.5rem;display:flex}
+.inner{margin:auto;width:100%;max-width:1180px}
+
+/* Titel-Folie */
+.hero h1{font-size:clamp(2rem,5.2vw,4.2rem);line-height:1.02;font-weight:800;letter-spacing:-.03em;max-width:18ch}
+.hero p.lead{margin-top:1rem;color:var(--muted);font-size:1.15rem;max-width:44ch}
+.verbs{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem}
+.verb-chip{padding:.55rem 1.1rem;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:1.15rem}
+.legend{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.6rem}
+.legend span{padding:.4rem .9rem;border-radius:999px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);border:1.5px solid color-mix(in srgb,var(--c) 45%,#fff)}
+.legend-title{margin-top:2rem;font-weight:600;color:var(--muted)}
+.go{margin-top:2rem;padding:.9rem 1.8rem;border-radius:999px;background:var(--p-ich);color:#fff;font-weight:700;font-size:1.1rem;transition:transform .15s,box-shadow .2s;box-shadow:0 8px 20px -8px rgba(37,99,235,.7)}
+.go:hover{transform:translateY(-2px)}
+
+/* Aufgaben-Folie */
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:2.2rem;align-items:start}
+.tag{display:inline-flex;align-items:center;gap:.6rem;font-weight:700;color:var(--muted);font-size:1rem}
+.num{display:inline-grid;place-items:center;min-width:2.6rem;height:2.6rem;padding:0 .6rem;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:1.15rem}
+.sentence{margin-top:1.1rem;font-size:clamp(1.7rem,3.6vw,3rem);line-height:1.35;font-weight:600;letter-spacing:-.015em}
+.blank{display:inline-block;min-width:5.2ch;text-align:center;border-bottom:.12em solid var(--ink);margin:0 .1em;line-height:1.1;transition:border-color .3s}
+.blank .ans{visibility:hidden;font-weight:800}
+.shown .blank{border-color:var(--c)}
+.shown .blank .ans{visibility:visible;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.end{color:var(--c);font-weight:800}
+.cue{border-radius:.25em;padding:0 .12em;transition:background .35s,color .35s}
+.shown .cue{color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);font-weight:800}
+
+.reveal{margin-top:1.6rem;padding:.8rem 1.6rem;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:1.05rem;transition:transform .15s,background .2s}
+.reveal:hover{transform:translateY(-2px)}
+.shown .reveal{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+
+.why{margin-top:1.4rem;max-height:0;opacity:0;overflow:hidden;transition:max-height .6s ease,opacity .5s ease .1s}
+.shown .why{max-height:480px;opacity:1}
+.why-in{border-left:7px solid var(--c);background:color-mix(in srgb,var(--c) 9%,#fff);border-radius:6px 16px 16px 6px;padding:1.1rem 1.3rem}
+.why h3{font-size:1.2rem;font-weight:800;color:var(--c);margin-bottom:.5rem}
+.why ul{list-style:none;display:grid;gap:.4rem;font-size:1.08rem;line-height:1.45}
+.why li{padding-left:1.5rem;position:relative}
+.why li::before{content:"";position:absolute;left:.2rem;top:.55em;width:.6rem;height:.6rem;border-radius:50%;background:var(--c)}
+.why b{color:var(--c)}
+
+/* Konjugationstabelle */
+.conj{background:var(--card);border:1.5px solid var(--line);border-radius:22px;padding:1.2rem;box-shadow:0 18px 40px -26px rgba(23,32,58,.45)}
+.conj-head{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;padding:.2rem .5rem .8rem}
+.conj-head h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+.badge{font-size:.85rem;font-weight:700;padding:.25rem .65rem;border-radius:999px;background:#FFF1D6;color:#8A5A00}
+.rows{display:grid;gap:.35rem}
+.row{display:grid;grid-template-columns:7.2rem 1fr;align-items:center;gap:.6rem;padding:.55rem .8rem;border-radius:12px;border:2px solid transparent;font-size:1.3rem;transition:opacity .35s,background .35s,border-color .35s,transform .35s}
+.row .pn{font-weight:700;color:var(--c);display:flex;align-items:center;gap:.5rem;font-size:1.1rem}
+.row .pn::before{content:"";width:.7rem;height:.7rem;border-radius:50%;background:var(--c)}
+.row .fm{font-weight:600}
+.shown .row{opacity:.38}
+.shown .row.hit{opacity:1;background:color-mix(in srgb,var(--c) 15%,#fff);border-color:var(--c);transform:scale(1.03)}
+.shown .row.hit .fm{font-weight:800}
+
+/* Zusammenfassung */
+.sum h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-.025em;margin-bottom:1.4rem}
+.sum ol{list-style:none;display:grid;gap:.7rem;max-width:760px}
+.sum li{display:flex;gap:1rem;align-items:baseline;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:.8rem 1.1rem;font-size:1.3rem;font-weight:600}
+.sum li .num{flex:0 0 auto;transform:translateY(.2rem)}
+
+/* Fragen: formell / informell */
+.mini{margin-top:1.3rem;font-weight:600;color:var(--muted);font-size:.95rem}
+.bubble{display:inline-block;margin-top:.4rem;background:var(--card);border:1.5px solid var(--line);border-radius:20px 20px 20px 5px;padding:.7rem 1.2rem;font-size:clamp(1.3rem,2.6vw,2rem);font-weight:600}
+.qline{margin-top:.4rem;border-bottom:.1em solid var(--ink);padding:.1em .1em .12em;min-height:1.5em;font-size:clamp(1.7rem,3.6vw,3rem);font-weight:600;line-height:1.3;letter-spacing:-.015em;transition:border-color .3s}
+.qline .qa{visibility:hidden;font-weight:800;display:inline-block}
+.shown .qline{border-color:var(--c)}
+.shown .qline .qa{visibility:visible;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.tiles{display:grid;gap:.9rem}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:1.1rem 1.3rem;transition:opacity .35s,background .35s,border-color .35s,transform .35s}
+.tile h3{font-size:1.6rem;font-weight:800;color:var(--c)}
+.tile .w{margin-top:.2rem;font-size:1.3rem;font-weight:700}
+.tile .s{margin-top:.35rem;color:var(--muted);font-size:1.02rem;line-height:1.4}
+.shown .tile{opacity:.35}
+.shown .tile.hit{opacity:1;background:color-mix(in srgb,var(--c) 13%,#fff);border-color:var(--c);transform:scale(1.03)}
+.tg{margin-left:.8rem;font-size:.9rem;font-weight:700;padding:.2rem .75rem;border-radius:999px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);white-space:nowrap}
+
+/* Artikel und Plural */
+.pair{margin-top:1.2rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.4rem;font-size:clamp(1.8rem,3.8vw,3.2rem);font-weight:600;letter-spacing:-.015em}
+.pcard{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:.8rem 1.4rem 1rem}
+.pcard small{display:block;font-size:.95rem;font-weight:600;color:var(--muted);margin-bottom:.3rem;letter-spacing:0}
+.arrow{color:var(--muted);font-size:.8em;margin:0 .2em}
+.art{display:inline-block;min-width:2.6ch;text-align:center;border-bottom:.1em solid var(--ink);margin-right:.3em;transition:border-color .3s}
+.art .ans,.plblank .ans{visibility:hidden;font-weight:800;display:inline-block}
+.shown .art{border-color:var(--c)}
+.shown .art .ans{visibility:visible;color:var(--c);animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.plblank{display:inline-block;min-width:6ch;border-bottom:.1em solid var(--ink);transition:border-color .3s}
+.shown .plblank{border-color:var(--p-wir)}
+.shown .plblank .ans{visibility:visible;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.pl .end{color:var(--p-wir);font-weight:800}
+.arts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.atile{text-align:center;padding:.8rem .3rem;border-radius:14px;border:2px solid transparent;background:color-mix(in srgb,var(--c) 10%,#fff);color:var(--c);font-weight:800;font-size:1.6rem;transition:opacity .35s,border-color .35s,transform .35s}
+.atile small{display:block;font-size:.82rem;font-weight:600;color:var(--muted)}
+.shown .atile{opacity:.35}
+.shown .atile.hit{opacity:1;border-color:var(--c);transform:scale(1.06)}
+.pchips{display:flex;flex-wrap:wrap;gap:.5rem}
+.pchip{padding:.5rem 1rem;border-radius:999px;font-weight:800;font-size:1.3rem;color:var(--p-wir);background:color-mix(in srgb,var(--p-wir) 10%,#fff);border:2px solid transparent;transition:opacity .35s,border-color .35s,transform .35s}
+.shown .pchip{opacity:.35}
+.shown .pchip.hit{opacity:1;border-color:var(--p-wir);transform:scale(1.08)}
+.sec{padding:1.1rem .5rem .6rem;font-size:1.2rem;font-weight:800}
+
+/* Aufgabe 4: Fragen bilden */
+.r-w{--rc:var(--p-wir)} .r-v{--rc:var(--p-sie)} .r-s{--rc:var(--p-ich)} .r-x{--rc:var(--ink)}
+.chiprow{margin-top:.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
+.sep{width:4px;height:1.5rem;border-radius:2px;background:var(--p-ihr)}
+.wchip{font-size:clamp(1.15rem,2.3vw,1.7rem);font-weight:600;padding:.3rem .85rem;border-radius:12px;background:var(--card);border:2px solid var(--line);transition:border-color .4s,background .4s,color .4s}
+.shown .wchip{border-color:var(--rc);color:var(--rc);background:color-mix(in srgb,var(--rc) 11%,#fff)}
+.shown .wchip.r-x{border-color:var(--line);background:var(--card)}
+.sline{display:block}
+.sline .aw{display:inline-block;visibility:hidden;font-weight:800;margin-right:.28em}
+.shown .sline .aw{visibility:visible;color:var(--rc);animation:pop .45s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i)*.13s)}
+.shown .sline .aw.r-x{font-weight:700}
+.strip{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.7rem}
+.strip span{padding:.25rem .65rem;border-radius:8px;font-weight:700;font-size:.95rem;color:var(--rc);background:color-mix(in srgb,var(--rc) 12%,#fff);border:1.5px solid color-mix(in srgb,var(--rc) 40%,#fff)}
+.sum .aw{visibility:visible;display:inline;margin-right:.28em;font-weight:800;color:var(--rc);animation:none}
+
+/* Aufgabe 5: gern */
+.r-g{--rc:var(--p-du)}
+.gtitle{margin-top:1rem;font-size:clamp(1.8rem,3.6vw,3rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.cards{margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.7rem}
+.scard{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:.8rem 1.1rem;font-size:1.45rem;font-weight:700;letter-spacing:-.01em;visibility:hidden}
+.shown .scard{visibility:visible;animation:pop .45s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i)*.1s)}
+.g-s{color:var(--p-ich)} .g-v{color:var(--p-sie)} .g-x{color:var(--p-wir)}
+.g-g{color:var(--p-du);background:color-mix(in srgb,var(--p-du) 16%,transparent);border-radius:.25em;padding:0 .12em}
+.rules{display:grid;gap:.9rem}
+.rule{border:2px solid var(--line);border-radius:18px;padding:1rem 1.2rem;background:var(--card);opacity:.45;transition:opacity .3s}
+.rule.on{opacity:1;border-color:var(--p-du);background:color-mix(in srgb,var(--p-du) 8%,#fff)}
+.rule h3{font-size:1.2rem;font-weight:800}
+.rule .ex{margin-top:.6rem;font-size:1.35rem;font-weight:700}
+
+/* Navigation */
+footer{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1.4rem 1rem}
+.nav{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--card);border:1.5px solid var(--line);font-size:1.4rem;font-weight:700;transition:transform .15s,border-color .2s,opacity .2s}
+.nav:hover:not(:disabled){transform:scale(1.08);border-color:var(--ink)}
+.nav:disabled{opacity:.3;cursor:default}
+.dots{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.dot{width:.65rem;height:.65rem;border-radius:50%;background:var(--line);transition:background .25s,transform .25s,width .25s}
+.dot.on{background:var(--ink);width:1.6rem;border-radius:999px}
+.dot.done{background:var(--muted)}
+
+@media(max-width:860px){
+  .grid{grid-template-columns:1fr;gap:1.4rem}
+  .slide{padding:.6rem 1rem 1rem}
+  .row{grid-template-columns:6.2rem 1fr;font-size:1.15rem}
+  .brand small{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .track,.why,.row,.cue{transition:none}
+  .shown .blank .ans{animation:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Prüfung<small id="taskName"></small></div>
+  <div class="tools">
+    <button class="chip-btn" id="soundBtn" aria-pressed="true">Ton</button>
+  </div>
+</header>
+<main><div class="track" id="track"></div></main>
+<footer>
+  <button class="nav" id="prev" aria-label="Zurück">←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav" id="next" aria-label="Weiter">→</button>
+</footer>
+
+<script>
+/* ============ Daten ============ */
+const PERSONS = {
+  ich: {label:'ich',       c:'var(--p-ich)'},
+  du:  {label:'du',        c:'var(--p-du)'},
+  er:  {label:'er / sie / es', c:'var(--p-er)'},
+  wir: {label:'wir',       c:'var(--p-wir)'},
+  ihr: {label:'ihr',       c:'var(--p-ihr)'},
+  sie: {label:'sie / Sie', c:'var(--p-sie)'}
+};
+const ORDER = ['ich','du','er','wir','ihr','sie'];
+
+/* Form = [Stamm, Endung] */
+const VERBS = {
+  sein:    {irr:true,  f:{ich:['','bin'], du:['','bist'], er:['','ist'], wir:['','sind'], ihr:['','seid'], sie:['','sind']}},
+  sprechen:{irr:true,  f:{ich:['sprech','e'], du:['sprich','st'], er:['sprich','t'], wir:['sprech','en'], ihr:['sprech','t'], sie:['sprech','en']}},
+  kommen:  {irr:false, f:{ich:['komm','e'], du:['komm','st'], er:['komm','t'], wir:['komm','en'], ihr:['komm','t'], sie:['komm','en']}},
+  lernen:  {irr:false, f:{ich:['lern','e'], du:['lern','st'], er:['lern','t'], wir:['lern','en'], ihr:['lern','t'], sie:['lern','en']}},
+  wohnen:  {irr:false, f:{ich:['wohn','e'], du:['wohn','st'], er:['wohn','t'], wir:['wohn','en'], ihr:['wohn','t'], sie:['wohn','en']}},
+  heißen:  {irr:false, f:{ich:['heiß','e'], du:['heiß','t'], er:['heiß','t'], wir:['heiß','en'], ihr:['heiß','t'], sie:['heiß','en']}}
+};
+
+/* Weitere Aufgaben später einfach hier anhängen */
+const TASKS = [
+  {
+    id: 1, type:'verben',
+    short: 'Aufgabe 1',
+    title: 'Ergänzen Sie die Verben in der richtigen Form',
+    verbs: ['sein','sprechen','kommen','lernen','wohnen','heißen'],
+    items: [
+      {n:0, ex:true, verb:'heißen',  p:'sie', text:'Guten Tag. Wie {blank} <span class="cue">Sie</span>?',
+       why:['Subjekt: <b>Sie</b> (höfliche Form, großes S)','<b>Sie</b> → Endung <b>-en</b>','heiß + <b>en</b> = <b>heißen</b>']},
+      {n:1, verb:'sein',    p:'sie', text:'Mein Name ist Bauer. Und wer {blank} <span class="cue">Sie</span>?',
+       why:['Subjekt: <b>Sie</b> (höfliche Form)','<b>sein</b> ist unregelmäßig – die Formen muss man lernen','<b>Sie</b> → <b>sind</b>']},
+      {n:2, verb:'kommen',  p:'ich', text:'Tufong Thrang. <span class="cue">Ich</span> {blank} aus Vietnam. Und Sie?',
+       why:['Subjekt: <b>ich</b>','<b>ich</b> → Endung <b>-e</b>','komm + <b>e</b> = <b>komme</b>']},
+      {n:3, verb:'wohnen',  p:'ich', text:'Aus Deutschland, aber <span class="cue">ich</span> {blank} in Frankreich, in Paris.',
+       why:['Subjekt: <b>ich</b>','<b>ich</b> → Endung <b>-e</b>','wohn + <b>e</b> = <b>wohne</b>']},
+      {n:4, verb:'sprechen',p:'sie', text:'Oh, welche Sprachen {blank} <span class="cue">Sie</span>? Deutsch und Französisch?',
+       why:['Subjekt: <b>Sie</b> (höfliche Form)','<b>Sie</b> → Endung <b>-en</b>','Bei <b>Sie</b> bleibt der Vokal: sprech + <b>en</b> = <b>sprechen</b>','Der Vokalwechsel e → i gibt es nur bei <b>du</b> und <b>er / sie / es</b>']},
+      {n:5, verb:'lernen',  p:'ich', text:'Ja, und <span class="cue">ich</span> {blank} Spanisch.',
+       why:['Subjekt: <b>ich</b>','<b>ich</b> → Endung <b>-e</b>','lern + <b>e</b> = <b>lerne</b>']}
+    ]
+  },
+  {
+    id: 2, type:'fragen',
+    short: 'Aufgabe 2',
+    title: 'Wie heißen die Fragen? Formell oder informell? Schreiben Sie!',
+    items: [
+      {n:0, ex:true, reg:'formell',   reply:'Ich heiße Helga Schmidt.', q:'Wie heißen <span class="cue">Sie</span>?',
+       why:['Die Frage: <b>Wie heißen Sie?</b>','Mit <b>Sie</b> → <b>formell</b>']},
+      {n:1, reg:'formell',   reply:'Aus Polen. Und <span class="cue">Sie</span>?', q:'Woher kommen <span class="cue">Sie</span>?',
+       why:['Die Antwort fragt zurück: <b>Und Sie?</b>','<b>Sie</b> → <b>formell</b>','Fragewort: <b>woher</b> = aus welchem Land?']},
+      {n:2, reg:'informell', reply:'Sehr gut. Und <span class="cue">dir</span>?', q:'Wie geht’s <span class="cue">dir</span>?',
+       why:['Die Antwort fragt zurück: <b>Und dir?</b>','<b>dir</b> gehört zu <b>du</b> → <b>informell</b>','<b>Wie geht’s dir?</b> = Wie geht es dir?']},
+      {n:3, reg:'formell',   reply:'Thai und Deutsch. Und <span class="cue">Sie</span>?', q:'Welche Sprachen sprechen <span class="cue">Sie</span>?',
+       why:['Die Antwort fragt zurück: <b>Und Sie?</b>','<b>Sie</b> → <b>formell</b>','Fragewort: <b>welche Sprachen</b>']},
+      {n:4, reg:'informell', reply:'In Berlin. Und <span class="cue">du</span>?', q:'Wo wohnst <span class="cue">du</span>?',
+       why:['Die Antwort fragt zurück: <b>Und du?</b>','<b>du</b> → <b>informell</b>','Fragewort: <b>wo</b> = an welchem Ort?']},
+      {n:5, reg:'informell', reply:'030 – 87676545. Und <span class="cue">deine</span>?', q:'Wie ist <span class="cue">deine</span> Telefonnummer?',
+       why:['Die Antwort fragt zurück: <b>Und deine?</b>','<b>deine</b> gehört zu <b>du</b> → <b>informell</b>','Formell wäre: <b>Ihre</b> Telefonnummer']}
+    ]
+  },
+  {
+    id: 3, type:'plural',
+    short: 'Aufgabe 3',
+    title: 'Ergänzen Sie den Artikel und den Plural!',
+    items: [
+      {n:0, ex:true, art:'das', noun:'Buch',       pt:'uer', plain:'die Bücher',
+       pl:'B<span class="end">ü</span>ch<span class="end">er</span>',
+       why:['<b>das</b> Buch → neutral','Plural: <b>die Bücher</b> – im Plural immer <b>die</b>','Umlaut <b>¨</b> (u → ü) und Endung <b>-er</b>']},
+      {n:1, art:'der', noun:'Tag',         pt:'e',   plain:'die Tage',
+       pl:'Tag<span class="end">e</span>',
+       why:['<b>der</b> Tag → maskulin','Plural: <b>die Tage</b> – im Plural immer <b>die</b>','Endung <b>-e</b>']},
+      {n:2, art:'die', noun:'Tablette',    pt:'n',   plain:'die Tabletten',
+       pl:'Tablette<span class="end">n</span>',
+       why:['<b>die</b> Tablette → feminin','Plural: <b>die Tabletten</b>','Endung <b>-n</b> (Wörter auf -e haben oft <b>-n</b>)']},
+      {n:3, art:'der', noun:'Arzt',        pt:'ue',  plain:'die Ärzte',
+       pl:'<span class="end">Ä</span>rzt<span class="end">e</span>',
+       why:['<b>der</b> Arzt → maskulin','Plural: <b>die Ärzte</b>','Umlaut <b>¨</b> (a → ä) und Endung <b>-e</b>']},
+      {n:4, art:'das', noun:'Schwimmbad',  pt:'uer', plain:'die Schwimmbäder',
+       pl:'Schwimmb<span class="end">ä</span>d<span class="end">er</span>',
+       why:['<b>das</b> Schwimmbad → neutral','Plural: <b>die Schwimmbäder</b>','Umlaut <b>¨</b> (a → ä) und Endung <b>-er</b>']},
+      {n:5, art:'das', noun:'Café',        pt:'s',   plain:'die Cafés',
+       pl:'Café<span class="end">s</span>',
+       why:['<b>das</b> Café → neutral','Plural: <b>die Cafés</b>','Endung <b>-s</b> (oft bei Wörtern aus anderen Sprachen)']}
+    ]
+  },
+  {
+    id: 4, type:'satzbau',
+    short: 'Aufgabe 4',
+    title: 'Schreiben Sie die Fragen!',
+    items: [
+      {n:0, ex:true, kind:'w',
+       given:[['Sie','s'],['was','w'],['von Beruf','x'],['sein','v']],
+       ans:[['Was','w'],['sind','v'],['Sie','s'],['von Beruf','x']],
+       why:['<b>was</b> ist ein W-Wort → <b>W-Frage</b>','W-Wort auf Position 1, Verb auf <b>Position 2</b>','sein + Sie → <b>sind</b>']},
+      {n:1, kind:'jn',
+       given:[['Sie','s'],['von Beruf','x'],['sein','v'],['Technikerin','x']],
+       ans:[['Sind','v'],['Sie','s'],['von Beruf','x'],['Technikerin','x']],
+       why:['Kein W-Wort → <b>Ja/Nein-Frage</b>','Das Verb steht auf <b>Position 1</b>','sein + Sie → <b>sind</b>']},
+      {n:2, kind:'jn',
+       given:[['ihr','s'],['am Sonntag','x'],['frei','x'],['haben','v']],
+       ans:[['Habt','v'],['ihr','s'],['am Sonntag','x'],['frei','x']],
+       why:['Kein W-Wort → <b>Ja/Nein-Frage</b>','Das Verb steht auf <b>Position 1</b>','haben + ihr → <b>habt</b>']},
+      {n:3, kind:'w',
+       given:[['du','s'],['machen','v'],['was','w'],['am Samstag','x'],['gern','x']],
+       ans:[['Was','w'],['machst','v'],['du','s'],['am Samstag','x'],['gern','x']],
+       why:['<b>was</b> ist ein W-Wort → <b>W-Frage</b>','W-Wort auf Position 1, Verb auf <b>Position 2</b>','machen + du → <b>machst</b>']},
+      {n:4, kind:'jn',
+       given:[['Herr Höflinger','s'],['bei „Taxi-Zentral“','x'],['arbeiten','v']],
+       ans:[['Arbeitet','v'],['Herr Höflinger','s'],['bei „Taxi-Zentral“','x']],
+       why:['Kein W-Wort → <b>Ja/Nein-Frage</b>','Das Verb steht auf <b>Position 1</b>','arbeiten + Herr Höflinger (= er) → <b>arbeitet</b>']},
+      {n:5, kind:'jn',
+       given:[['du','s'],['um 18 Uhr','x'],['Fußball','x'],['spielen','v']],
+       ans:[['Spielst','v'],['du','s'],['um 18 Uhr','x'],['Fußball','x']],
+       why:['Kein W-Wort → <b>Ja/Nein-Frage</b>','Das Verb steht auf <b>Position 1</b>','spielen + du → <b>spielst</b>']}
+    ]
+  },
+  {
+    id: 5, type:'gern',
+    short: 'Aufgabe 5',
+    title: 'Was machen Sie gern in der Freizeit? Schreiben Sie!',
+    groups: [
+      {title:'Nur das Verb', rule:'a',
+       items:[['fotografiere',''],['singe',''],['koche',''],['schwimme',''],['reise',''],['tanze',''],['jogge',''],['lese',''],['male','']],
+       why:['Hier gibt es nur ein Verb: <b>Ich koche</b>','<b>gern</b> steht direkt nach dem Verb','Danach kommt nichts mehr: <b>Ich koche gern.</b>']},
+      {title:'Verb + Ergänzung', rule:'b',
+       items:[['höre','Musik'],['gehe','ins Kino'],['spiele','Fußball'],['spiele','Tennis'],['spiele','Padel'],['spiele','Videospiele'],['spiele','Computerspiele'],['spiele','Basketball']],
+       why:['Zuerst das Verb: <b>Ich höre</b>','Dann <b>gern</b> – direkt nach dem Verb','Dann kommt die Ergänzung: <b>Ich höre gern Musik.</b>','Auch bei <b>spielen</b>: <b>Ich spiele gern Fußball.</b>']}
+    ]
+  }
+];
+
+/* ============ Hilfsfunktionen ============ */
+const $ = s => document.querySelector(s);
+const wordHTML = ([stem,end]) => `${stem}<span class="end">${end}</span>`;
+const formOf = (item) => VERBS[item.verb].f[item.p];
+
+function sentenceHTML(item, filled){
+  const ans = `<span class="ans">${wordHTML(formOf(item))}</span>`;
+  return item.text.replace('{blank}', filled ? `<span class="blank" style="border-color:var(--c)">${ans.replace('visibility','v')}</span>` : `<span class="blank">${ans}</span>`);
+}
+
+function conjHTML(item){
+  const v = VERBS[item.verb];
+  const rows = ORDER.map(p => `
+    <div class="row${p===item.p?' hit':''}" style="--c:${PERSONS[p].c}">
+      <span class="pn">${PERSONS[p].label}</span>
+      <span class="fm">${wordHTML(v.f[p])}</span>
+    </div>`).join('');
+  return `<aside class="conj">
+    <div class="conj-head"><h2>${item.verb}</h2>${v.irr?'<span class="badge">unregelmäßig</span>':''}</div>
+    <div class="rows">${rows}</div></aside>`;
+}
+
+/* ============ Folien bauen ============ */
+const slides = []; // {el, kind, revealable}
+const track = $('#track');
+
+function addSlide(html, cls, extra={}){
+  const s = document.createElement('section');
+  s.className = 'slide ' + (cls||'');
+  s.innerHTML = `<div class="inner">${html}</div>`;
+  track.appendChild(s);
+  slides.push({el:s, ...extra});
+  return s;
+}
+
+function buildVerben(task){
+  // Titel
+  const chips = task.verbs.map(v=>`<span class="verb-chip">${v}</span>`).join('');
+  const legend = ORDER.map(p=>`<span style="--c:${PERSONS[p].c}">${PERSONS[p].label}</span>`).join('');
+  addSlide(`
+    <div class="hero">
+      <div class="tag"><span class="num">${task.id}</span> ${task.short}</div>
+      <h1 style="margin-top:1rem">${task.title}</h1>
+      <div class="verbs">${chips}</div>
+      <p class="legend-title">Jede Person hat ihre eigene Farbe:</p>
+      <div class="legend" style="margin-top:.7rem">${legend}</div>
+      <button class="go" id="go${task.id}">Los geht’s</button>
+    </div>`, 'hero-slide', {task});
+
+  // Sätze
+  task.items.forEach(item=>{
+    const c = PERSONS[item.p].c;
+    const s = addSlide(`
+      <div class="grid">
+        <div>
+          <div class="tag"><span class="num">${item.n}</span>${item.ex?'Beispiel':''}</div>
+          <p class="sentence">${sentenceHTML(item,false)}</p>
+          <button class="reveal">Lösung zeigen</button>
+          <div class="why"><div class="why-in">
+            <h3>Warum „${formOf(item).join('')}“?</h3>
+            <ul>${item.why.map(w=>`<li>${w}</li>`).join('')}</ul>
+          </div></div>
+        </div>
+        ${conjHTML(item)}
+      </div>`, 'item', {task, item, revealable:true});
+    s.style.setProperty('--c', c);
+    s.querySelector('.reveal').addEventListener('click', ()=>toggle(slides.findIndex(x=>x.el===s)));
+  });
+
+  // Zusammenfassung
+  const list = task.items.map(item=>`
+    <li style="--c:${PERSONS[item.p].c}"><span class="num">${item.n}</span><span class="sentence" style="margin:0;font-size:inherit">${sentenceHTML(item,true).replace(/visibility:hidden/g,'')}</span></li>`).join('');
+  const sum = addSlide(`<div class="sum verben"><h2>Alle Lösungen</h2><ol>${list}</ol></div>`, 'sum-slide', {task});
+  sum.classList.add('shown');
+  sum.querySelectorAll('li').forEach(li=>{ li.classList.add('shown'); });
+
+}
+
+/* ---------- gemeinsame Helfer ---------- */
+function heroSlide(task, extra){
+  addSlide(`
+    <div class="hero">
+      <div class="tag"><span class="num">${task.id}</span> ${task.short}</div>
+      <h1 style="margin-top:1rem">${task.title}</h1>
+      ${extra}
+      <button class="go">Los geht’s</button>
+    </div>`, 'hero-slide', {task});
+}
+function wireReveal(s){
+  const i = slides.findIndex(x=>x.el===s);
+  s.querySelector('.reveal').addEventListener('click', ()=>toggle(i));
+}
+const whyHTML = (title, lines) => `<div class="why"><div class="why-in"><h3>${title}</h3><ul>${lines.map(w=>`<li>${w}</li>`).join('')}</ul></div></div>`;
+
+/* ---------- Aufgabe 2: Fragen ---------- */
+const REG = { formell:{c:'var(--p-sie)'}, informell:{c:'var(--p-du)'} };
+
+function buildFragen(task){
+  heroSlide(task, `
+    <p class="legend-title">Achten Sie auf das Wort am Ende der Antwort:</p>
+    <div class="legend" style="margin-top:.7rem">
+      <span style="--c:var(--p-sie)">formell: Sie</span>
+      <span style="--c:var(--p-du)">informell: du · dir · deine</span>
+    </div>`);
+
+  task.items.forEach(item=>{
+    const tile = (key,w,s)=>`
+      <div class="tile${item.reg===key?' hit':''}" style="--c:${REG[key].c}">
+        <h3>${key}</h3><p class="w" style="color:${REG[key].c}">${w}</p><p class="s">${s}</p>
+      </div>`;
+    const s = addSlide(`
+      <div class="grid">
+        <div>
+          <div class="tag"><span class="num">${item.n}</span>${item.ex?'Beispiel':''}</div>
+          <p class="mini">Frage</p>
+          <div class="qline"><span class="qa">${item.q}</span></div>
+          <p class="mini">Antwort</p>
+          <div class="bubble">${item.reply}</div>
+          <button class="reveal">Lösung zeigen</button>
+          ${whyHTML('Warum '+item.reg+'?', item.why)}
+        </div>
+        <aside class="conj">
+          <div class="conj-head"><h2>Sie oder du?</h2></div>
+          <div class="tiles">
+            ${tile('formell','Sie · Ihr','bei fremden Erwachsenen, im Beruf')}
+            ${tile('informell','du · dir · dein','bei Freunden, Familie, Kindern')}
+          </div>
+        </aside>
+      </div>`, 'item', {task, item, revealable:true});
+    s.style.setProperty('--c', REG[item.reg].c);
+    wireReveal(s);
+  });
+
+  const list = task.items.map(item=>`
+    <li style="--c:${REG[item.reg].c}"><span class="num">${item.n}</span>
+    <span>${item.q}<span class="tg">${item.reg}</span></span></li>`).join('');
+  const sum = addSlide(`<div class="sum"><h2>Alle Lösungen</h2><ol>${list}</ol></div>`, 'sum-slide', {task});
+  sum.classList.add('shown');
+}
+
+/* ---------- Aufgabe 3: Artikel und Plural ---------- */
+const ART = {
+  der:{c:'var(--p-ich)', g:'maskulin'},
+  die:{c:'var(--p-ihr)', g:'feminin'},
+  das:{c:'var(--p-du)',  g:'neutral'}
+};
+const PTYPES = [['e','-e'],['n','-n'],['ue','¨-e'],['uer','¨-er'],['s','-s']];
+
+function buildPlural(task){
+  const legend = Object.keys(ART).map(a=>`<span style="--c:${ART[a].c}">${a} · ${ART[a].g}</span>`).join('');
+  const chips = PTYPES.map(([k,l])=>`<span class="pchip">${l}</span>`).join('');
+  heroSlide(task, `
+    <p class="legend-title">Jeder Artikel hat seine Farbe:</p>
+    <div class="legend" style="margin-top:.7rem">${legend}</div>
+    <p class="legend-title">Im Plural heißt es immer <b style="color:var(--ink)">die</b>. Das Wort ändert sich so:</p>
+    <div class="legend" style="margin-top:.7rem;gap:.5rem">${chips}</div>`);
+
+  task.items.forEach(item=>{
+    const atile = a=>`<div class="atile${a===item.art?' hit':''}" style="--c:${ART[a].c}">${a}<small>${ART[a].g}</small></div>`;
+    const pchip = ([k,l])=>`<span class="pchip${k===item.pt?' hit':''}">${l}</span>`;
+    const s = addSlide(`
+      <div class="grid">
+        <div>
+          <div class="tag"><span class="num">${item.n}</span>${item.ex?'Beispiel':''}</div>
+          <div class="pair">
+            <div class="pcard"><small>Singular</small><span class="art"><span class="ans">${item.art}</span></span>${item.noun}</div>
+            <span class="arrow">→</span>
+            <div class="pcard pl"><small>Plural</small><span class="plblank"><span class="ans">die ${item.pl}</span></span></div>
+          </div>
+          <button class="reveal">Lösung zeigen</button>
+          ${whyHTML('Warum „'+item.art+' '+item.noun+'“ – „'+item.plain+'“?', item.why)}
+        </div>
+        <aside class="conj">
+          <div class="conj-head"><h2>Artikel</h2></div>
+          <div class="arts">${Object.keys(ART).map(atile).join('')}</div>
+          <div class="conj-head sec"><h2>Plural</h2></div>
+          <div class="pchips">${PTYPES.map(pchip).join('')}</div>
+        </aside>
+      </div>`, 'item', {task, item, revealable:true});
+    s.style.setProperty('--c', ART[item.art].c);
+    wireReveal(s);
+  });
+
+  const list = task.items.map(item=>`
+    <li style="--c:${ART[item.art].c}"><span class="num">${item.n}</span>
+    <span><span style="color:var(--c);font-weight:800">${item.art}</span> ${item.noun}
+    <span class="arrow">→</span> <span class="pl">die ${item.pl}</span></span></li>`).join('');
+  const sum = addSlide(`<div class="sum"><h2>Alle Lösungen</h2><ol>${list}</ol></div>`, 'sum-slide', {task});
+  sum.classList.add('shown');
+}
+
+/* ---------- Aufgabe 4: Fragen bilden ---------- */
+const KIND = {
+  w:  {c:'var(--p-wir)', name:'W-Frage'},
+  jn: {c:'var(--p-du)',  name:'Ja/Nein-Frage'}
+};
+const strip = parts => `<div class="strip">${parts.map(([t,r])=>`<span class="r-${r}">${t}</span>`).join('')}</div>`;
+
+function sentenceParts(item){
+  return item.ans.map(([t,r],i)=>`<span class="aw r-${r}" style="--i:${i}">${t}${i===item.ans.length-1?'?':''}</span>`).join('');
+}
+
+function buildSatzbau(task){
+  heroSlide(task, `
+    <p class="legend-title">Zwei Arten von Fragen:</p>
+    <div class="legend" style="margin-top:.7rem">
+      <span style="--c:var(--p-wir)">W-Frage</span>
+      <span style="--c:var(--p-du)">Ja/Nein-Frage</span>
+    </div>
+    <p class="legend-title">Diese Farben helfen:</p>
+    <div class="legend" style="margin-top:.7rem">
+      <span style="--c:var(--p-wir)">W-Wort</span>
+      <span style="--c:var(--p-sie)">Verb</span>
+      <span style="--c:var(--p-ich)">Subjekt</span>
+    </div>`);
+
+  task.items.forEach(item=>{
+    const k = KIND[item.kind];
+    const chips = item.given.map(([t,r])=>`<span class="wchip r-${r}">${t}</span>`).join('<span class="sep"></span>');
+    const tile = (key,sub,pattern)=>`
+      <div class="tile${item.kind===key?' hit':''}" style="--c:${KIND[key].c}">
+        <h3>${KIND[key].name}</h3><p class="s">${sub}</p>${strip(pattern)}
+      </div>`;
+    const s = addSlide(`
+      <div class="grid">
+        <div>
+          <div class="tag"><span class="num">${item.n}</span>${item.ex?'Beispiel':''}</div>
+          <p class="mini">Wörter</p>
+          <div class="chiprow">${chips}</div>
+          <p class="mini">Frage</p>
+          <div class="qline"><span class="sline">${sentenceParts(item)}</span></div>
+          <button class="reveal">Lösung zeigen</button>
+          ${whyHTML('Warum '+k.name+'?', item.why)}
+        </div>
+        <aside class="conj">
+          <div class="conj-head"><h2>Welche Frage?</h2></div>
+          <div class="tiles">
+            ${tile('w','mit W-Wort: was, wo, woher, wie …',[['W-Wort','w'],['Verb','v'],['Subjekt','s'],['…','x']])}
+            ${tile('jn','ohne W-Wort – Antwort: ja oder nein',[['Verb','v'],['Subjekt','s'],['…','x']])}
+          </div>
+        </aside>
+      </div>`, 'item', {task, item, revealable:true});
+    s.style.setProperty('--c', k.c);
+    wireReveal(s);
+  });
+
+  const list = task.items.map(item=>`
+    <li style="--c:${KIND[item.kind].c}"><span class="num">${item.n}</span>
+    <span class="sline" style="display:inline">${sentenceParts(item)}<span class="tg">${KIND[item.kind].name}</span></span></li>`).join('');
+  const sum = addSlide(`<div class="sum"><h2>Alle Lösungen</h2><ol>${list}</ol></div>`, 'sum-slide', {task});
+  sum.classList.add('shown');
+}
+
+/* ---------- Aufgabe 5: gern ---------- */
+function gernSentence([v,x]){
+  return `<span class="g-s">Ich</span> <span class="g-v">${v}</span> <span class="g-g">gern</span>${x?` <span class="g-x">${x}</span>`:''}.`;
+}
+function buildGern(task){
+  heroSlide(task, `
+    <p class="legend-title">Diese Farben helfen:</p>
+    <div class="legend" style="margin-top:.7rem">
+      <span style="--c:var(--p-ich)">Ich</span>
+      <span style="--c:var(--p-sie)">Verb</span>
+      <span style="--c:var(--p-du)">gern</span>
+      <span style="--c:var(--p-wir)">Ergänzung</span>
+    </div>
+    <p class="legend-title">Merke: <b style="color:var(--p-du)">gern</b> steht direkt nach dem Verb.</p>`);
+
+  task.groups.forEach(g=>{
+    const cards = g.items.map((it,i)=>`<div class="scard" style="--i:${i}">${gernSentence(it)}</div>`).join('');
+    const s = addSlide(`
+      <div class="grid">
+        <div>
+          <div class="tag"><span class="num">${task.id}</span>${task.short}</div>
+          <h2 class="gtitle">${g.title}</h2>
+          <div class="cards">${cards}</div>
+          <button class="reveal">Lösung zeigen</button>
+          ${whyHTML('Wo steht „gern“?', g.why)}
+        </div>
+        <aside class="conj">
+          <div class="conj-head"><h2>Wo steht „gern“?</h2></div>
+          <div class="rules">
+            <div class="rule${g.rule==='a'?' on':''}">
+              <h3>Nur das Verb</h3>
+              <div class="strip"><span class="r-s">Ich</span><span class="r-v">Verb</span><span class="r-g">gern</span></div>
+              <p class="ex">${gernSentence(['koche',''])}</p>
+            </div>
+            <div class="rule${g.rule==='b'?' on':''}">
+              <h3>Verb + Ergänzung</h3>
+              <div class="strip"><span class="r-s">Ich</span><span class="r-v">Verb</span><span class="r-g">gern</span><span class="r-w">Ergänzung</span></div>
+              <p class="ex">${gernSentence(['höre','Musik'])}</p>
+            </div>
+          </div>
+        </aside>
+      </div>`, 'item', {task, revealable:true});
+    s.style.setProperty('--c','var(--p-du)');
+    wireReveal(s);
+  });
+}
+
+const BUILD = {verben:buildVerben, fragen:buildFragen, plural:buildPlural, satzbau:buildSatzbau, gern:buildGern};
+TASKS.forEach(t=>BUILD[t.type](t));
+
+/* Zusammenfassung: Antworten immer sichtbar + gefärbt */
+document.querySelectorAll('.sum.verben li').forEach(li=>{
+  const c = li.getAttribute('style').match(/--c:([^;]+)/)[1];
+  li.querySelectorAll('.ans').forEach(a=>{a.style.visibility='visible';});
+  li.querySelectorAll('.blank').forEach(b=>{b.style.borderColor=c;});
+  li.querySelectorAll('.end').forEach(e=>{e.style.color=c;});
+  li.querySelectorAll('.cue').forEach(e=>{e.style.color=c;e.style.background='color-mix(in srgb,'+c+' 16%,transparent)';e.style.fontWeight='800';});
+});
+
+/* ============ Punkte ============ */
+const dots = $('#dots');
+slides.forEach((s,i)=>{
+  const d = document.createElement('button');
+  d.className='dot'; d.setAttribute('aria-label','Folie '+(i+1));
+  if(i>0 && slides[i].task!==slides[i-1].task) d.style.marginLeft='.7rem';
+  d.addEventListener('click',()=>go(i));
+  dots.appendChild(d);
+});
+
+/* ============ Navigation ============ */
+let cur = 0;
+function go(i, silent){
+  i = Math.max(0, Math.min(slides.length-1, i));
+  if(i!==cur && !silent) sfx.nav();
+  cur = i;
+  track.style.transform = `translateX(${-100*cur}%)`;
+  [...dots.children].forEach((d,k)=>{
+    d.classList.toggle('on',k===cur);
+    d.classList.toggle('done',k<cur);
+    d.style.display = (window.innerWidth<860 && slides[k].task!==slides[cur].task) ? 'none' : '';
+  });
+  $('#prev').disabled = cur===0;
+  $('#next').disabled = cur===slides.length-1;
+  $('#taskName').textContent = slides[cur].task ? ' · ' + slides[cur].task.short : '';
+  slides.forEach((s,k)=>{ s.el.setAttribute('aria-hidden', k===cur?'false':'true'); s.el.inert = k!==cur; });
+}
+function toggle(i){
+  const s = slides[i];
+  if(!s || !s.revealable) return;
+  const on = s.el.classList.toggle('shown');
+  s.el.querySelector('.reveal').textContent = on ? 'Lösung verbergen' : 'Lösung zeigen';
+  on ? sfx.reveal() : sfx.hide();
+}
+$('#prev').addEventListener('click',()=>go(cur-1));
+$('#next').addEventListener('click',()=>go(cur+1));
+document.querySelectorAll('.go').forEach(b=>b.addEventListener('click',()=>{sfx.start();go(cur+1,true);}));
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown') {go(cur+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){go(cur-1);}
+  else if((e.key===' '||e.key==='Enter') && !(e.target.closest && e.target.closest('button'))){
+    e.preventDefault();
+    slides[cur].revealable ? toggle(cur) : go(cur+1);
+  }
+});
+let sx=null;
+document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(sx===null) return;
+  const dx=e.changedTouches[0].clientX-sx; sx=null;
+  if(Math.abs(dx)>60) go(cur+(dx<0?1:-1));
+},{passive:true});
+
+/* ============ Töne ============ */
+let AC=null, soundOn=true;
+function ctx(){
+  AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+function tone(freq,at,dur,type='sine',vol=.12){
+  if(!soundOn) return;
+  try{
+    const a=ctx(), o=a.createOscillator(), g=a.createGain(), t=a.currentTime+at;
+    o.type=type; o.frequency.setValueAtTime(freq,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t+dur+.05);
+  }catch(_){}
+}
+const sfx = {
+  nav:()=>tone(520,0,.09,'triangle',.07),
+  hide:()=>tone(330,0,.12,'triangle',.07),
+  reveal:()=>[523.25,659.25,783.99].forEach((f,i)=>tone(f,i*.08,.38,'sine',.11)),
+  start:()=>[392,523.25].forEach((f,i)=>tone(f,i*.1,.25,'triangle',.09))
+};
+$('#soundBtn').addEventListener('click',e=>{
+  soundOn=!soundOn; e.currentTarget.setAttribute('aria-pressed',soundOn);
+  if(soundOn) sfx.nav();
+});
+
+window.addEventListener('resize',()=>go(cur,true));
+go(0,true);
+</script>
+</body>
+</html>
